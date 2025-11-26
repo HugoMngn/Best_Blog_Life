@@ -1,4 +1,3 @@
-
 # Application de Blog Best_Blog_Life - Clean Code
 
 Application de blog complète avec React/TypeScript (frontend) et Python/FastAPI (backend).
@@ -46,7 +45,6 @@ npm run dev
 ## Documentation API
 
 - Swagger UI: http://localhost:8000/docs
-- ReDoc: http://localhost:8000/redoc
 
 ## Tests
 

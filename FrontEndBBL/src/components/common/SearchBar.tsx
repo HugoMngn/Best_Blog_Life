@@ -18,19 +18,38 @@ export const SearchBar: React.FC<SearchBarProps> = ({
     placeholder = 'Rechercher...',
 }) => {
     return (
-        <div className="relative">
+        <div className="relative mx-auto w-fit">
             <input
                 type="text"
                 value={value}
                 onChange={(e) => onChange(e.target.value)}
                 placeholder={placeholder}
-                className="w-full px-4 py-2 pl-10 pr-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="
+                    w-80 
+                    pl-4 pr-14 py-3 
+                    border border-gray-300 
+                    rounded-full 
+                    shadow-sm 
+                    transition-all duration-200 
+                    focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent
+                    placeholder-gray-400
+                "
             />
-            <Search className="absolute left-3 top-2.5 text-gray-400" size={20} />
+            {/* Icône loupe (à droite) */}
+            <div className="absolute right-10 top-1/2 transform -translate-y-1/2 pointer-events-none">
+                <Search className="text-gray-400" size={20} />
+            </div>
+
+            {/* Bouton clear */}
             {value && onClear && (
                 <button
                     onClick={onClear}
-                    className="absolute right-3 top-2.5 text-gray-400 hover:text-gray-600"
+                    className="
+                        absolute right-4 top-1/2 transform -translate-y-1/2 
+                        text-gray-400 hover:text-gray-600 
+                        transition-colors
+                        flex items-center justify-center
+                    "
                 >
                     <X size={20} />
                 </button>

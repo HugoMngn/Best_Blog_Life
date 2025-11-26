@@ -1,31 +1,41 @@
-/* Fade in animation */
+/* ----- Fade In Animation ----- */
 @keyframes fadeIn {
-    from {
+    0% {
         opacity: 0;
         transform: translateY(10px);
     }
 
-    to {
+    100% {
         opacity: 1;
         transform: translateY(0);
     }
 }
 
 .animate-fadeIn {
-    animation: fadeIn 0.4s ease-out;
+    animation: fadeIn 0.5s ease-out forwards;
+    /* durée légèrement augmentée et forwards pour conserver l’état final */
 }
 
-/* Troncature */
-.line-clamp-2 {
+/* ----- Troncature de texte (line-clamp) ----- */
+.line-clamp-2,
+.line-clamp-3 {
     display: -webkit-box;
-    -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
+}
+
+.line-clamp-2 {
+    -webkit-line-clamp: 2;
 }
 
 .line-clamp-3 {
-    display: -webkit-box;
     -webkit-line-clamp: 3;
+}
+
+/* Version moderne cross-browser (optionnelle) */
+.line-clamp {
+    display: -webkit-box;
     -webkit-box-orient: vertical;
     overflow: hidden;
+    text-overflow: ellipsis;
 }

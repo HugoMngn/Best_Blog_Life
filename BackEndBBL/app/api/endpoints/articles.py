@@ -11,6 +11,8 @@ from app.services.article_service import ArticleService
 
 router = APIRouter()
 
+"""GET all articles, GET article par ID, POST créer article, PUT mettre à jour article, DELETE supprimer article, POST liker article"""
+
 
 @router.get("/", response_model=List[ArticleResponse])
 def get_articles(
