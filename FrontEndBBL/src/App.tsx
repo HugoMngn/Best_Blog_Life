@@ -2,7 +2,7 @@
  * Composant principal de l'application
  * Gère l'état global et la navigation
  */
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useArticles } from './hooks/useArticles';
 import { useSearch } from './hooks/useSearch';
 import { Header } from './components/layout/Header';

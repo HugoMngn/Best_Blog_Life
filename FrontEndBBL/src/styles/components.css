@@ -1,0 +1,15 @@
+/* Custom reusable components for the app */
+
+@layer components {
+    .btn {
+        @apply inline-flex items-center justify-center px-4 py-2 rounded-md border border-transparent text-sm font-medium shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500;
+    }
+
+    .card {
+        @apply bg-white border border-gray-200 rounded-lg shadow-sm p-4;
+    }
+
+    .modal {
+        @apply fixed inset-0 flex items-center justify-center z-50;
+    }
+}

@@ -1,0 +1,13 @@
+/* Custom utilities that extend Tailwind */
+
+@layer utilities {
+    .text-ellipsis {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .gradient-to-br {
+        background-image: linear-gradient(to bottom right, var(--tw-gradient-from, #fff), var(--tw-gradient-to, #000));
+    }
+}

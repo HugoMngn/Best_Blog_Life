@@ -31,7 +31,8 @@ api.interceptors.response.use(
         return response;
     },
     (error: AxiosError) => {
-        const message = error.response?.data?.message || error.message;
+        const typedError = error as AxiosError<{ message?: string }>;
+        const message = typedError.response?.data?.message || typedError.message;
         console.error('[API Response Error]', message);
         return Promise.reject(error);
     }
