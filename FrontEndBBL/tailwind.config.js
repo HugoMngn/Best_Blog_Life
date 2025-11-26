@@ -1,42 +1,34 @@
-/** @type {import('tailwindcss').Config} */
+import forms from "@tailwindcss/forms";
+import typography from "@tailwindcss/typography";
+import aspectRatio from "@tailwindcss/aspect-ratio";
 
 export default {
-    content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
+    content: [
+        "./index.html",
+        "./src/**/*.{js,ts,jsx,tsx}",
+    ],
+
     darkMode: "class",
 
     theme: {
         extend: {
             colors: {
-                primary: "#3b82f6",
-                secondary: "#6366f1",
-                soft: "#f1f5f9",
+                primary: "#1d4ed8",
             },
-
             boxShadow: {
-                soft: "0 4px 16px rgba(0, 0, 0, 0.06)",
+                soft: "0 4px 10px rgba(0,0,0,0.08)",
             },
-
             animation: {
-                fadeIn: "fadeIn 0.4s ease-out both",
-                spinSlow: "spin 2s linear infinite",
-            },
-
-            keyframes: {
-                fadeIn: {
-                    from: { opacity: "0", transform: "translateY(8px)" },
-                    to: { opacity: "1", transform: "translateY(0)" },
-                },
+                fadeIn: "fadeIn 0.4s ease-out",
             },
         },
     },
 
     safelist: [
-        "min-h-screen",
-        "bg-gradient-to-br",
-        "from-gray-50",
-        "to-blue-50",
         "animate-fadeIn",
         "line-clamp-2",
         "line-clamp-3",
     ],
-}
+
+    plugins: [forms, typography, aspectRatio],
+};

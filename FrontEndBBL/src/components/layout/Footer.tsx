@@ -11,7 +11,7 @@ export const Footer: React.FC = () => {
                 <div className="flex flex-col md:flex-row items-center justify-between">
                     <div className="mb-4 md:mb-0">
                         <p className="text-sm">
-                            © 2024 Mon Blog. Tous droits réservés.
+                            © 2025 Best Blog Life. Tous droits réservés.
                         </p>
                     </div>
                     <div className="flex gap-4">
@@ -24,7 +24,7 @@ export const Footer: React.FC = () => {
                             <Github size={20} />
                         </a>
                         <a
-                            href="mailto:contact@monblog.com"
+                            href="mailto:contacteznous@bbl.com"
                             className="hover:text-blue-400 transition-colors"
                         >
                             <Mail size={20} />

@@ -17,9 +17,9 @@ export const Header: React.FC<HeaderProps> = ({ onCreateClick }) => {
                     <div className="flex items-center gap-3">
                         <FileText size={32} />
                         <div>
-                            <h1 className="text-3xl font-bold">Mon Blog</h1>
+                            <h1 className="text-3xl font-bold">Best Blog Life</h1>
                             <p className="text-blue-100 text-sm">
-                                Partagez vos idées avec le monde
+                                Viens raconter ce que tu veux mdr !
                             </p>
                         </div>
                     </div>

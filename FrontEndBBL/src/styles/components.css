@@ -1,15 +1,45 @@
-/* Custom reusable components for the app */
+/* ----- Header ----- */
+.header {
+    @apply flex justify-between items-center p-6 bg-white dark:bg-gray-800 shadow-sm;
+}
 
-@layer components {
-    .btn {
-        @apply inline-flex items-center justify-center px-4 py-2 rounded-md border border-transparent text-sm font-medium shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500;
-    }
+.header-title {
+    @apply text-3xl font-bold text-gray-900 dark:text-white;
+}
 
-    .card {
-        @apply bg-white border border-gray-200 rounded-lg shadow-sm p-4;
-    }
+/* ----- Search bar ----- */
+.search-input {
+    @apply w-full p-3 mb-6 rounded-xl border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-200 shadow-sm focus:ring-2 focus:ring-blue-500 outline-none;
+}
 
-    .modal {
-        @apply fixed inset-0 flex items-center justify-center z-50;
-    }
+/* ----- Cards d’article ----- */
+.article-card {
+    @apply bg-white dark:bg-gray-800 rounded-xl p-6 shadow-md hover:shadow-lg transition-all duration-200 mb-6 animate-fadeIn;
+}
+
+.article-title {
+    @apply text-2xl font-bold text-gray-900 dark:text-white mb-2;
+}
+
+.article-content {
+    @apply text-gray-700 dark:text-gray-300 mb-4 leading-relaxed;
+}
+
+.article-meta {
+    @apply flex justify-between text-sm text-gray-500 dark:text-gray-400 mb-4;
+}
+
+/* ----- Boutons d'action (voir, éditer, supprimer) ----- */
+.action-btn {
+    @apply p-2 rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition;
+}
+
+/* ----- Nouveau bouton ----- */
+.primary-btn {
+    @apply flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl shadow transition;
+}
+
+/* ----- Footer ----- */
+.footer {
+    @apply mt-10 py-8 text-center text-sm text-gray-500 dark:text-gray-400;
 }
