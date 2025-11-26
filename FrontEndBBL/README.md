@@ -1,73 +1,55 @@
-# React + TypeScript + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+# **Frontend**-**Application** de **Blog**
 
-Currently, two official plugins are available:
+**Application** frontend moderne construite avec **React**,**TypeScript** et **Tailwind**CSS**.**
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## **Principes**Clean**Code**
 
-## React Compiler
+**-****Composants réutilisables******:**Button**,**Input**,**Modal**, etc**.**
+**-****Hooks personnalisés******: useArticles**,** useSearch pour la logique métier
+**-****Types stricts******:**TypeScript** pour la sécurité des types
+**-****Validation******:**Validation** côté client avec messages d'erreur clairs
+**-****Architecture en couches******:**S**éparation services**/**composants**/**types
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## **Installation**
 
-## Expanding the ESLint configuration
+**`**`**`**bash npm install **`**`**`**
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## **Scripts** disponibles
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+**`**`**`**bash
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+# Développement
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+npm run dev
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+# Build production
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+npm run build
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+# Preview du build
+
+npm run preview
+
+# Tests
+
+npm test
+
+# Linting
+
+npm run lint
+**`**`**`**
+
+## **Structure** des dossiers
+
+**`**`**`** src/ ├── components/       # Composants React │   ├── articles/    # Composants liés aux articles │   ├── common/      # Composants réutilisables │   └── layout/      # Composants de mise en page ├── hooks/           # Hooks personnalisés ├── services/        # Services API ├── types/           # Types TypeScript └── utils/           # Fonctions utilitaires **`**`**`**
+
+## **Fonctionnalités**
+
+✅ **Création** d'articles avec validation
+✅ **Modification** et suppression
+✅ **Système** de likes
+✅ **Recherche** en temps réel avec debounce
+✅ **Interface** responsive
+✅ **Gestion** d'erreurs élégante
+✅ **Modals** pour les formulaires
