@@ -12,8 +12,17 @@ class CommentService {
      */
     async getCommentsByArticle(articleId: number): Promise<Comment[]> {
         try {
-            const response = await api.get<Comment[]>(`${this.BASE_PATH}/article/${articleId}`);
-            return response.data;
+            const response = await api.get(`${this.BASE_PATH}/article/${articleId}`);
+            const data = response.data as any[];
+            // Map server (snake_case) to frontend camelCase types
+            return data.map((c) => ({
+                id: c.id,
+                articleId: c.article_id,
+                author: c.author ?? '',
+                content: c.content,
+                likesCount: c.likes_count ?? 0,
+                createdAt: c.created_at,
+            } as Comment));
         } catch (error) {
             throw new Error('Erreur lors de la récupération des commentaires');
         }
@@ -24,8 +33,16 @@ class CommentService {
      */
     async createComment(comment: CreateCommentDto): Promise<Comment> {
         try {
-            const response = await api.post<Comment>(this.BASE_PATH, comment);
-            return response.data;
+            const response = await api.post(this.BASE_PATH, comment);
+            const c = response.data;
+            return {
+                id: c.id,
+                articleId: c.article_id,
+                author: c.author ?? '',
+                content: c.content,
+                likesCount: c.likes_count ?? 0,
+                createdAt: c.created_at,
+            } as Comment;
         } catch (error) {
             throw new Error('Erreur lors de la création du commentaire');
         }
@@ -47,8 +64,16 @@ class CommentService {
      */
     async likeComment(id: number): Promise<Comment> {
         try {
-            const response = await api.post<Comment>(`${this.BASE_PATH}/${id}/like`);
-            return response.data;
+            const response = await api.post(`${this.BASE_PATH}/${id}/like`);
+            const c = response.data;
+            return {
+                id: c.id,
+                articleId: c.article_id,
+                author: c.author ?? '',
+                content: c.content,
+                likesCount: c.likes_count ?? 0,
+                createdAt: c.created_at,
+            } as Comment;
         } catch (error) {
             throw new Error('Erreur lors de l\'ajout du like');
         }

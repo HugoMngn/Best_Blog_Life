@@ -1,5 +1,9 @@
 """
-Tests unitaires pour les articles
+Unit tests for article endpoints
+
+These tests use an in-memory SQLite database and override the FastAPI
+database dependency to ensure isolation. Each test recreates the schema so
+they are independent from one another.
 """
 
 import pytest
@@ -16,7 +20,11 @@ TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engin
 
 
 def override_get_db():
-    """Override de la dépendance de base de données pour les tests"""
+    """Override dependency: yield a transient session bound to the test DB.
+
+    This is used to replace the app's `get_db` dependency so the tests operate
+    on a separate database instance using the same ORM models.
+    """
     try:
         db = TestingSessionLocal()
         yield db

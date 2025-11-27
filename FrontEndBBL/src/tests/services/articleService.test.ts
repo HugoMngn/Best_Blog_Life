@@ -1,11 +1,7 @@
-/**
- * Tests pour le service d'articles
- */
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import articleService from '../../services/articleService';
 import api from '../../services/api';
 
-// Mock du module API
 vi.mock('../../services/api');
 
 describe('ArticleService', () => {
@@ -16,8 +12,24 @@ describe('ArticleService', () => {
     describe('getAllArticles', () => {
         it('devrait récupérer tous les articles', async () => {
             const mockArticles = [
-                { id: 1, title: 'Article 1', content: 'Content 1', author: 'Author 1' },
-                { id: 2, title: 'Article 2', content: 'Content 2', author: 'Author 2' },
+                {
+                    id: 1,
+                    title: 'Article 1',
+                    content: 'Content 1',
+                    author: 'Author 1',
+                    likesCount: 0,
+                    commentsCount: 0,
+                    createdAt: '2024-01-01T00:00:00Z'
+                },
+                {
+                    id: 2,
+                    title: 'Article 2',
+                    content: 'Content 2',
+                    author: 'Author 2',
+                    likesCount: 0,
+                    commentsCount: 0,
+                    createdAt: '2024-01-02T00:00:00Z'
+                },
             ];
 
             vi.mocked(api.get).mockResolvedValue({ data: mockArticles });
@@ -53,9 +65,16 @@ describe('ArticleService', () => {
                 title: 'New Article',
                 content: 'New Content',
                 author: 'New Author',
+                password: 'testpass123',
             };
 
-            const createdArticle = { id: 1, ...newArticle, likesCount: 0 };
+            const createdArticle = {
+                id: 1,
+                ...newArticle,
+                likesCount: 0,
+                commentsCount: 0,
+                createdAt: '2024-01-01T00:00:00Z'
+            };
 
             vi.mocked(api.post).mockResolvedValue({ data: createdArticle });
 
@@ -70,9 +89,11 @@ describe('ArticleService', () => {
         it('devrait supprimer un article', async () => {
             vi.mocked(api.delete).mockResolvedValue({});
 
-            await articleService.deleteArticle(1);
+            await articleService.deleteArticle(1, 'testpass123');
 
-            expect(api.delete).toHaveBeenCalledWith('/articles/1');
+            expect(api.delete).toHaveBeenCalledWith('/articles/1', {
+                data: { password: 'testpass123' }
+            });
         });
     });
 
@@ -84,6 +105,8 @@ describe('ArticleService', () => {
                 content: 'Content',
                 author: 'Author',
                 likesCount: 6,
+                commentsCount: 0,
+                createdAt: '2024-01-01T00:00:00Z'
             };
 
             vi.mocked(api.post).mockResolvedValue({ data: likedArticle });

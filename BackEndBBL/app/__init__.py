@@ -1,3 +1,5 @@
 """
-App package initializer (empty) — makes `app` a Python package for imports
+Application Blog API Package
 """
+
+__version__ = "2.0.0"

@@ -1,6 +1,8 @@
 /**
- * Composant principal de l'application
- * Gère l'état global et la navigation
+ * App: top-level component for the frontend application
+ * - Integrates hooks (useArticles, useSearch)
+ * - Switches between list and detail views
+ * - Provides modals for create/edit operations
  */
 import { useState, useEffect } from 'react';
 import { useArticles } from './hooks/useArticles';
@@ -9,9 +11,9 @@ import { Header } from './components/layout/Header';
 import { Footer } from './components/layout/Footer';
 import { SearchBar } from './components/common/SearchBar';
 import { ArticleList } from './components/articles/ArticleList';
-import { ArticleForm } from './components/articles/ArticleForm';
 import { ArticleDetail } from './components/articles/ArticleDetail';
-import { Modal } from './components/common/Modal';
+import { CreateArticleModal } from './components/articles/CreateArticleModal';
+import { EditArticleModal } from './components/articles/EditArticleModal';
 import { Article, CreateArticleDto } from './types/article.types';
 
 type ViewMode = 'list' | 'detail';
@@ -35,66 +37,47 @@ function App() {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
-  // Effectue la recherche quand la query debounced change
   useEffect(() => {
     fetchArticles(debouncedQuery || undefined);
   }, [debouncedQuery, fetchArticles]);
 
-  /**
-   * Gère la création d'un article
-   */
-  const handleCreateArticle = async (articleData: CreateArticleDto) => {
+  const handleCreateArticle = async (articleData: CreateArticleDto & { password: string }) => {
     await createArticle(articleData);
     setIsCreateModalOpen(false);
   };
 
-  /**
-   * Gère la modification d'un article
-   */
-  const handleUpdateArticle = async (articleData: CreateArticleDto) => {
+  const handleUpdateArticle = async (
+    articleData: CreateArticleDto,
+    password: string
+  ) => {
     if (!selectedArticle) return;
-
-    await updateArticle(selectedArticle.id, {
-      title: articleData.title,
-      content: articleData.content,
-    });
-
+    await updateArticle(selectedArticle.id, articleData, password);
     setIsEditModalOpen(false);
     setSelectedArticle(null);
   };
 
-  /**
-   * Affiche le détail d'un article
-   */
   const handleViewArticle = (article: Article) => {
     setSelectedArticle(article);
     setViewMode('detail');
   };
 
-  /**
-   * Ouvre le formulaire d'édition
-   */
   const handleEditArticle = (article: Article) => {
     setSelectedArticle(article);
     setIsEditModalOpen(true);
   };
 
-  /**
-   * Retourne à la liste
-   */
   const handleBackToList = () => {
     setViewMode('list');
     setSelectedArticle(null);
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 flex flex-col">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 flex flex-col">
       <Header onCreateClick={() => setIsCreateModalOpen(true)} />
 
-      <main className="flex-1 container mx-auto px-4 py-8">
+      <main className="flex-1 container mx-auto px-4 py-8 max-w-7xl">
         {viewMode === 'list' ? (
           <>
-            {/* Barre de recherche */}
             <div className="mb-8 max-w-2xl mx-auto">
               <SearchBar
                 value={searchQuery}
@@ -104,14 +87,14 @@ function App() {
               />
             </div>
 
-            {/* Indicateur de recherche */}
             {debouncedQuery && (
-              <div className="mb-4 text-center">
-                <p className="text-gray-600">
-                  Résultats pour : <span className="font-medium">{debouncedQuery}</span>
+              <div className="mb-6 text-center">
+                <p className="text-gray-600 text-lg">
+                  Résultats pour :{' '}
+                  <span className="font-semibold text-blue-600">{debouncedQuery}</span>
                   <button
                     onClick={clearSearch}
-                    className="ml-2 text-blue-600 hover:text-blue-700 underline"
+                    className="ml-3 text-blue-600 hover:text-blue-700 underline font-medium"
                   >
                     Effacer
                   </button>
@@ -119,21 +102,17 @@ function App() {
               </div>
             )}
 
-            {/* Liste des articles */}
             <ArticleList
               articles={articles}
               loading={loading}
               error={error}
               onLike={likeArticle}
-              onDelete={deleteArticle}
-              onEdit={handleEditArticle}
               onView={handleViewArticle}
               onRetry={() => fetchArticles()}
             />
           </>
         ) : (
           <>
-            {/* Détail de l'article */}
             {selectedArticle && (
               <div className="max-w-4xl mx-auto">
                 <ArticleDetail
@@ -151,39 +130,21 @@ function App() {
 
       <Footer />
 
-      {/* Modal de création */}
-      <Modal
+      <CreateArticleModal
         isOpen={isCreateModalOpen}
         onClose={() => setIsCreateModalOpen(false)}
-        title="Créer un nouvel article"
-      >
-        <ArticleForm
-          onSubmit={handleCreateArticle}
-          onCancel={() => setIsCreateModalOpen(false)}
-        />
-      </Modal>
+        onSubmit={handleCreateArticle}
+      />
 
-      {/* Modal d'édition */}
-      <Modal
+      <EditArticleModal
         isOpen={isEditModalOpen}
+        article={selectedArticle}
         onClose={() => {
           setIsEditModalOpen(false);
           setSelectedArticle(null);
         }}
-        title="Modifier l'article"
-      >
-        {selectedArticle && (
-          <ArticleForm
-            article={selectedArticle}
-            onSubmit={handleUpdateArticle}
-            onCancel={() => {
-              setIsEditModalOpen(false);
-              setSelectedArticle(null);
-            }}
-            isEditing
-          />
-        )}
-      </Modal>
+        onSubmit={handleUpdateArticle}
+      />
     </div>
   );
 }

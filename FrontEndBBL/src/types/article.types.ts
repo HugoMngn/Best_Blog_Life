@@ -1,32 +1,38 @@
-/**
- * Types TypeScript pour les articles
- * Définit les interfaces pour une gestion type-safe des articles
- */
-
 export interface Article {
     id: number;
     title: string;
     content: string;
     author: string;
     likesCount: number;
+    commentsCount: number;
     createdAt: string;
     updatedAt?: string;
 }
+
 
 export interface CreateArticleDto {
     title: string;
     content: string;
     author: string;
+    password?: string;
 }
 
 export interface UpdateArticleDto {
     title?: string;
     content?: string;
+    password: string;
 }
 
-export interface ArticleFilters {
-    search?: string;
-    author?: string;
-    sortBy?: 'createdAt' | 'likesCount';
-    order?: 'asc' | 'desc';
+export interface Comment {
+    id: number;
+    articleId: number;
+    author: string;
+    content: string;
+    createdAt: string;
+}
+
+export interface CreateCommentDto {
+    articleId: number;
+    author: string;
+    content: string;
 }

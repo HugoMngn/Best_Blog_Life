@@ -18,14 +18,14 @@ export const SearchBar: React.FC<SearchBarProps> = ({
     placeholder = 'Rechercher...',
 }) => {
     return (
-        <div className="relative mx-auto w-fit">
+        <div className="relative mx-auto w-full max-w-2xl">
             <input
                 type="text"
                 value={value}
                 onChange={(e) => onChange(e.target.value)}
                 placeholder={placeholder}
                 className="
-                    w-80 
+                    w-full max-w-2xl 
                     pl-4 pr-14 py-3 
                     border border-gray-300 
                     rounded-full 
@@ -44,12 +44,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
             {value && onClear && (
                 <button
                     onClick={onClear}
-                    className="
-                        absolute right-4 top-1/2 transform -translate-y-1/2 
-                        text-gray-400 hover:text-gray-600 
-                        transition-colors
-                        flex items-center justify-center
-                    "
+                    className="absolute right-4 top-1/2 transform -translate-y-1/2 ..."
                 >
                     <X size={20} />
                 </button>

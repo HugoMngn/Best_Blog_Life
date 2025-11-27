@@ -1,19 +1,20 @@
 /**
- * Hook personnalisé pour la gestion des articles
- * Encapsule la logique d'état et les opérations CRUD
+ * useArticles: custom React hook that encapsulates article-related state
+ * and side-effects: fetching, creating, updating, deleting, and liking
+ * articles via the `articleService` API wrapper.
  */
 import { useState, useEffect, useCallback } from 'react';
 import articleService from '../services/articleService';
-import { Article, CreateArticleDto, UpdateArticleDto } from '../types/article.types';
+import { Article, CreateArticleDto } from '../types/article.types';
 
 interface UseArticlesReturn {
     articles: Article[];
     loading: boolean;
     error: string | null;
     fetchArticles: (search?: string) => Promise<void>;
-    createArticle: (article: CreateArticleDto) => Promise<Article>;
-    updateArticle: (id: number, article: UpdateArticleDto) => Promise<Article>;
-    deleteArticle: (id: number) => Promise<void>;
+    createArticle: (article: CreateArticleDto & { password: string }) => Promise<Article>;
+    updateArticle: (id: number, article: CreateArticleDto, password: string) => Promise<Article>;
+    deleteArticle: (id: number, password: string) => Promise<void>;
     likeArticle: (id: number) => Promise<void>;
 }
 
@@ -22,15 +23,25 @@ export const useArticles = (): UseArticlesReturn => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
-    /**
-     * Récupère les articles avec recherche optionnelle
-     */
+    // Fonction utilitaire pour mapper snake_case → camelCase
+    const mapArticle = (a: any): Article => ({
+        id: a.id,
+        title: a.title,
+        content: a.content,
+        author: a.author,
+        likesCount: a.likes_count ?? 0,
+        commentsCount: a.comments?.length ?? a.comments_count ?? 0,
+        createdAt: a.created_at,
+        updatedAt: a.updated_at,
+    });
+
     const fetchArticles = useCallback(async (search?: string) => {
         try {
             setLoading(true);
             setError(null);
             const data = await articleService.getAllArticles(search);
-            setArticles(data);
+            const mapped = data.map(mapArticle);
+            setArticles(mapped);
         } catch (err) {
             const message = err instanceof Error ? err.message : 'Une erreur est survenue';
             setError(message);
@@ -39,64 +50,50 @@ export const useArticles = (): UseArticlesReturn => {
         }
     }, []);
 
-    /**
-     * Crée un nouvel article
-     */
-    const createArticle = useCallback(async (article: CreateArticleDto): Promise<Article> => {
+    const createArticle = useCallback(async (article: CreateArticleDto & { password: string }): Promise<Article> => {
+        // eslint-disable-next-line no-useless-catch
         try {
             const newArticle = await articleService.createArticle(article);
-            setArticles(prev => [newArticle, ...prev]);
-            return newArticle;
+            setArticles(prev => [mapArticle(newArticle), ...prev]);
+            return mapArticle(newArticle);
         } catch (err) {
             throw err;
         }
     }, []);
 
-    /**
-     * Met à jour un article
-     */
-    const updateArticle = useCallback(async (id: number, article: UpdateArticleDto): Promise<Article> => {
+    const updateArticle = useCallback(async (id: number, article: CreateArticleDto, password: string): Promise<Article> => {
+        // eslint-disable-next-line no-useless-catch
         try {
-            const updatedArticle = await articleService.updateArticle(id, article);
-            setArticles(prev =>
-                prev.map(a => a.id === id ? updatedArticle : a)
-            );
-            return updatedArticle;
+            const updatedArticle = await articleService.updateArticle(id, article, password);
+            const mapped = mapArticle(updatedArticle);
+            setArticles(prev => prev.map(a => a.id === id ? mapped : a));
+            return mapped;
         } catch (err) {
             throw err;
         }
     }, []);
 
-    /**
-     * Supprime un article
-     */
-    const deleteArticle = useCallback(async (id: number): Promise<void> => {
+    const deleteArticle = useCallback(async (id: number, password: string): Promise<void> => {
+        // eslint-disable-next-line no-useless-catch
         try {
-            await articleService.deleteArticle(id);
+            await articleService.deleteArticle(id, password);
             setArticles(prev => prev.filter(article => article.id !== id));
         } catch (err) {
-            const message = err instanceof Error ? err.message : 'Erreur lors de la suppression';
-            setError(message);
             throw err;
         }
     }, []);
 
-    /**
-     * Ajoute un like à un article
-     */
     const likeArticle = useCallback(async (id: number): Promise<void> => {
         try {
             const updatedArticle = await articleService.likeArticle(id);
-            setArticles(prev =>
-                prev.map(article => article.id === id ? updatedArticle : article)
-            );
+            const mapped = mapArticle(updatedArticle);
+            setArticles(prev => prev.map(article => article.id === id ? mapped : article));
         } catch (err) {
             const message = err instanceof Error ? err.message : 'Erreur lors du like';
             setError(message);
         }
     }, []);
 
-    // Charge les articles au montage du composant
     useEffect(() => {
         fetchArticles();
     }, [fetchArticles]);

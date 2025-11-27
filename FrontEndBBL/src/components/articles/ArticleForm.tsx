@@ -1,6 +1,3 @@
-/**
- * Composant formulaire de création/modification d'article
- */
 import React, { useState, useEffect } from 'react';
 import { Article, CreateArticleDto } from '../../types/article.types';
 import { Input } from '../common/Input';
@@ -12,6 +9,11 @@ import {
     validateAuthor,
 } from '../../utils/validators';
 
+/**
+ * ArticleForm component
+ * - Used for creating or editing an article
+ * - Includes local form state, simple validation and submit handling
+ */
 interface ArticleFormProps {
     article?: Article;
     onSubmit: (article: CreateArticleDto) => Promise<void>;
@@ -19,6 +21,15 @@ interface ArticleFormProps {
     isEditing?: boolean;
 }
 
+/**
+ * ArticleForm: React functional component
+ *
+ * Props:
+ * - article: optional Article to prefill the form (edit mode)
+ * - onSubmit: callback to handle create/update actions, returns a promise
+ * - onCancel: callback to close the form without saving
+ * - isEditing: boolean flag to indicate edit mode (disables author input)
+ */
 export const ArticleForm: React.FC<ArticleFormProps> = ({
     article,
     onSubmit,
@@ -37,9 +48,9 @@ export const ArticleForm: React.FC<ArticleFormProps> = ({
         author?: string | null;
     }>({});
 
+    // Local UI state to prevent duplicate submissions
     const [isSubmitting, setIsSubmitting] = useState(false);
 
-    // Réinitialise le formulaire si l'article change
     useEffect(() => {
         if (article) {
             setFormData({
@@ -51,41 +62,33 @@ export const ArticleForm: React.FC<ArticleFormProps> = ({
     }, [article]);
 
     /**
-     * Valide le formulaire complet
+     * validateForm : perform field validations and set error messages
+     * Returns true if the form is valid, false otherwise
      */
     const validateForm = (): boolean => {
         const titleError = validateArticleTitle(formData.title);
         const contentError = validateArticleContent(formData.content);
         const authorError = validateAuthor(formData.author);
 
-        setErrors({
-            title: titleError,
-            content: contentError,
-            author: authorError,
-        });
-
+        setErrors({ title: titleError, content: contentError, author: authorError });
         return !titleError && !contentError && !authorError;
     };
 
     /**
-     * Gère la soumission du formulaire
+     * handleSubmit : prevent default submit, validate the form and call onSubmit
      */
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-
-        if (!validateForm()) {
-            return;
-        }
+        if (!validateForm()) return;
 
         setIsSubmitting(true);
         try {
             await onSubmit(formData);
-            // Réinitialise le formulaire après succès
             if (!isEditing) {
                 setFormData({ title: '', content: '', author: '' });
             }
-        } catch (error) {
-            console.error('Erreur lors de la soumission:', error);
+        } catch (err) {
+            console.error(err);
             alert('Une erreur est survenue. Veuillez réessayer.');
         } finally {
             setIsSubmitting(false);
@@ -93,16 +96,23 @@ export const ArticleForm: React.FC<ArticleFormProps> = ({
     };
 
     /**
-     * Met à jour un champ du formulaire
+     * handleChange : update the local form state and clear relevant error
      */
     const handleChange = (field: keyof CreateArticleDto, value: string) => {
         setFormData(prev => ({ ...prev, [field]: value }));
-        // Efface l'erreur du champ modifié
         setErrors(prev => ({ ...prev, [field]: null }));
     };
 
     return (
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form
+            onSubmit={handleSubmit}
+            className="
+                space-y-6
+                w-full
+                max-w-xl
+                mx-auto
+            "
+        >
             <Input
                 label="Titre de l'article *"
                 type="text"
@@ -133,7 +143,7 @@ export const ArticleForm: React.FC<ArticleFormProps> = ({
                 disabled={isSubmitting}
             />
 
-            <div className="flex gap-4 justify-end">
+            <div className="flex justify-end gap-4 pt-2 border-t border-gray-100 mt-4">
                 <Button
                     type="button"
                     variant="secondary"
@@ -147,11 +157,7 @@ export const ArticleForm: React.FC<ArticleFormProps> = ({
                     variant="primary"
                     disabled={isSubmitting}
                 >
-                    {isSubmitting
-                        ? 'En cours...'
-                        : isEditing
-                            ? 'Mettre à jour'
-                            : 'Publier'}
+                    {isSubmitting ? 'En cours...' : isEditing ? 'Mettre à jour' : 'Publier'}
                 </Button>
             </div>
         </form>
