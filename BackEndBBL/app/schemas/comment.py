@@ -34,6 +34,7 @@ class CommentResponse(CommentBase):
     article_id: int
     likes_count: int
     created_at: datetime
+    likes_count: Optional[int] = 0
 
     class Config:
         from_attributes = True
